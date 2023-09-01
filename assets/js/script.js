@@ -71,18 +71,17 @@ const getData = async (indicator) => {
 
 btn.addEventListener('click', async () => {
     const amount = parseFloat(amountValue.value);
-
     if (isNaN(amount)) {
         result.textContent = 'Por favor, ingresa un monto válido.';
         result.style.color = 'red';
-        return;
+    } else {
+        result.style.color = ''; // Restaura el color original
+        const selectedCurrency = currency.value;
+        const data = await getData(selectedCurrency);
+
+        const conversion = amount / data.serie[0].valor;
+        result.textContent = `Resultado: $${conversion.toFixed(2)}`;
+
+        renderChart(data.serie);
     }
-
-    const selectedCurrency = currency.value;
-    const data = await getData(selectedCurrency);
-
-    const conversion = amount / data.serie[0].valor;
-    result.textContent = `Resultado: $${conversion.toFixed(2)}`;
-
-    renderChart(data.serie);
 });
